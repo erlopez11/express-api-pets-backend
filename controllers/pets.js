@@ -13,5 +13,15 @@ router.post('/', async (req, res) => {
     }
 });
 
+//GET /pets Index Route
+router.get('/', async (req, res) => {
+    try {
+        const allPets = await Pet.find({});
+        res.status(200).json(allPets);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
 
 module.exports = router;
