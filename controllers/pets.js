@@ -29,8 +29,26 @@ router.get('/:petId', async (req,res) => {
         const currentPet = await Pet.findById(req.params.petId);
         if(!currentPet) {
             res.status(404);
-            throw new Error('Pet not Found'); 
+            throw new Error('Pet Not Found'); 
             //error message displays in p-tag in frontend for user like in React JWT auth lab
+        }
+        res.status(200).json(currentPet);
+    } catch (error) {
+        if (res.statusCode === 404) {
+            res.json({error: error.message});
+        } else {
+            res.status(500).json({error: error.message});
+        }
+    }
+});
+
+//DELETE /pets/:petId Delete Route
+router.delete('/:petId', async (req, res) => {
+    try {
+        const currentPet = await Pet.findByIdAndDelete(req.params.petId);
+        if (!currentPet) {
+            res.status(404);
+            throw new Error('Pet Not Found');
         }
         res.status(200).json(currentPet);
     } catch (error) {
