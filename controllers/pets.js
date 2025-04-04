@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
         const allPets = await Pet.find({});
         res.status(200).json(allPets);
     } catch (error) {
+        console.log(error);
         res.status(500).json({error: error.message});
     }
 });
@@ -55,6 +56,28 @@ router.delete('/:petId', async (req, res) => {
         if (res.statusCode === 404) {
             res.json({error: error.message});
         } else {
+            console.log(error);
+            res.status(500).json({error: error.message});
+        }
+    }
+});
+
+//UPDATE /pets/:petId Update Route
+router.put('/:petId', async (req, res) => {
+    try {
+        const updatedPet = await Pet.findByIdAndUpdate(req.params.petId, req.body, {
+            new: true,
+        });
+        if (!updatedPet) {
+            res.status(404);
+            throw new Error('Pet Not Found');
+        }
+        res.status(200).json(updatedPet);
+    } catch (error) {
+        if (res.statusCode === 404) {
+            res.json({error: error.message});
+        } else {
+         
             res.status(500).json({error: error.message});
         }
     }
